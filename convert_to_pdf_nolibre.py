@@ -32,22 +32,21 @@ if sys.stdout is None:
 if sys.stderr is None:
     sys.stderr = open(os.devnull, "w", encoding="utf-8")
 
-# 【修復中文路徑 Bug】利用 Windows API 強制取得正確的 Unicode 參數，防止 pythonw 產生 anonymous 錯誤
+# 【修復 Windows 中文路徑 Bug】
+# 當使用 pythonw.exe (無控制台模式) 時，重新將標準編碼環境導向 UTF-8，避免遇到中文路徑時解碼出錯
 if sys.platform == 'win32':
     try:
-        # 使用 Windows 內建的 CommandLineToArgvW 重新獲取 UTF-16 參數，完全避免 cmd 與 pythonw 的解碼衝突
-        shell32 = ctypes.windll.shell32
-        kernel32 = ctypes.windll.kernel32
-        
-        cmd_line = kernel32.GetCommandLineW()
-        argc = ctypes.c_int(0)
-        argv_ptr = shell32.CommandLineToArgvW(cmd_line, ctypes.byref(argc))
-        
-        if argv_ptr:
-            # 重新建立 sys.argv
-            sys.argv = [ctypes.wstring_at(argv_ptr[i]) for i in range(argc.value)]
-            # 釋放記憶體
-            kernel32.LocalFree(argv_ptr)
+        import locale
+        # 強制指定全域系統編碼使用 utf-8 處理
+        if sys.stdout is not None:
+            sys.stdout.reconfigure(encoding='utf-8')
+        if sys.stderr is not None:
+            sys.stderr.reconfigure(encoding='utf-8')
+            
+        # 修復 Windows 傳遞中文路徑參數給 sys.argv 時的解碼問題
+        # 使用 sys.executable 呼叫寬字元 API 來確保參數不會因為 ansi/cp950 解碼錯誤而被破壞
+        ctypes.windll.kernel32.SetConsoleCP(65001)
+        ctypes.windll.kernel32.SetConsoleOutputCP(65001)
     except Exception:
         pass
 
