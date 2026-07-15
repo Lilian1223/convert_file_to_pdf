@@ -9,7 +9,7 @@
 2. Open cmd and verify installation:
    ```cmd
    python --version
-  ```
+   ```
 ## If you already have Python, then...
 
 1. Open cmd and install the required libraries:
