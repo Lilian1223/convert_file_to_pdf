@@ -28,9 +28,28 @@ from xml.sax.saxutils import escape as xml_escape
 # 用 pythonw.exe 執行時沒有主控台，sys.stdout/stderr 會是 None，
 # 若有任何底層程式呼叫 print() 會直接出錯，這裡先接到黑洞避免整支程式壞掉
 if sys.stdout is None:
-    sys.stdout = open(os.devnull, "w")
+    sys.stdout = open(os.devnull, "w", encoding="utf-8")
 if sys.stderr is None:
-    sys.stderr = open(os.devnull, "w")
+    sys.stderr = open(os.devnull, "w", encoding="utf-8")
+
+# 【修復中文路徑 Bug】利用 Windows API 強制取得正確的 Unicode 參數，防止 pythonw 產生 anonymous 錯誤
+if sys.platform == 'win32':
+    try:
+        # 使用 Windows 內建的 CommandLineToArgvW 重新獲取 UTF-16 參數，完全避免 cmd 與 pythonw 的解碼衝突
+        shell32 = ctypes.windll.shell32
+        kernel32 = ctypes.windll.kernel32
+        
+        cmd_line = kernel32.GetCommandLineW()
+        argc = ctypes.c_int(0)
+        argv_ptr = shell32.CommandLineToArgvW(cmd_line, ctypes.byref(argc))
+        
+        if argv_ptr:
+            # 重新建立 sys.argv
+            sys.argv = [ctypes.wstring_at(argv_ptr[i]) for i in range(argc.value)]
+            # 釋放記憶體
+            kernel32.LocalFree(argv_ptr)
+    except Exception:
+        pass
 
 
 def get_desktop_path():
