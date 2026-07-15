@@ -2,15 +2,15 @@
 
 ## If you don't have Python on your device...
 
-1. Download
+1. Download: 
 https://www.python.org/downloads/
 
-2. At cmd
+2. At cmd enter: 
 python --version
 
 ## If you already have Python, then...
 
-1. Download
+1. Download: 
 py -m pip install python-docx openpyxl python-pptx img2pdf reportlab pillow
 
 2. Add shortcut
