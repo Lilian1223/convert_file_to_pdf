@@ -69,26 +69,32 @@ def unique_path(path):
 
 
 def get_cjk_styles():
-    """建立支援中文（繁體）顯示的段落樣式"""
+    """建立支援中文（繁體）顯示的段落樣式，直接讀取 Windows 本地微軟正黑體"""
     from reportlab.pdfbase import pdfmetrics
-    from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+    from reportlab.pdfbase.ttfonts import TTFont
     from reportlab.lib.styles import ParagraphStyle
     from reportlab.lib.enums import TA_LEFT
 
-    font_name = "MSung-Light"
+    font_name = "MSJH" # 微軟正黑體縮寫
+    
     if font_name not in pdfmetrics.getRegisteredFontNames():
-        pdfmetrics.registerFont(UnicodeCIDFont(font_name))
+        # 尋找 Windows 系統內建的微軟正黑體路徑
+        windir = os.environ.get("SystemRoot", "C:\\Windows")
+        font_path = os.path.join(windir, "Fonts", "msjh.ttc") # msjh.ttc 是正黑體
+        
+        if os.path.exists(font_path):
+            try:
+                # 註冊微軟正黑體（TTC 檔的第一個字型通常是標準體）
+                pdfmetrics.registerFont(TTFont(font_name, font_path, index=0))
+            except Exception:
+                font_name = "Helvetica" # 如果註冊失敗，退回預設
+        else:
+            font_name = "Helvetica"
 
     normal = ParagraphStyle("CJKNormal", fontName=font_name, fontSize=10, leading=15, alignment=TA_LEFT)
     heading = ParagraphStyle("CJKHeading", fontName=font_name, fontSize=14, leading=20, spaceAfter=8)
     mono = ParagraphStyle("CJKMono", fontName=font_name, fontSize=9, leading=13)
     return normal, heading, mono, font_name
-
-
-def to_cell(text, style):
-    from reportlab.platypus import Paragraph
-    text = "" if text is None else str(text)
-    return Paragraph(xml_escape(text).replace("\n", "<br/>"), style)
 
 
 def docx_to_pdf(src, dest):
