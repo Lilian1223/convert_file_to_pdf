@@ -10,7 +10,7 @@ python --version
 
 ## If you already have Python, then...
 
-1. Download, at cmd enter: 
+1. Download; at cmd enter: 
 py -m pip install python-docx openpyxl python-pptx img2pdf reportlab pillow
 
 2. Add shortcut
@@ -26,4 +26,4 @@ After you drag the file up, a small window will pop up telling you which ones su
 
 2：Complete silence, do not jump anything
 Right-click on the desktop → Add → Shortcut, enter the target field：
-pythonw.exe "C:\Users\你的帳號\Desktop\convert_to_pdf_nolibre.py" --silent
+pythonw.exe "C:\Users\YOUR USER NAME\Desktop\convert_to_pdf_nolibre.py" --silent
