@@ -1,44 +1,34 @@
-# How to use
+# Guide: Turn `convert_by_word.py` into a Portable Desktop App (.exe)
 
-## If you don't have Python on your device...
+This guide will show you how to set up, install the necessary tools, and package the `convert_by_word.py` script into a single executable (`.exe`) file that you can easily use on any Windows PC.
 
-1. Download and install Python:
+---
+
+## Prerequisite: Install Python & Add to PATH
+
+If you don't have Python installed, or if your Command Prompt doesn't recognize Python commands:
+
+1. Download the latest Python installer from the official website:
    https://www.python.org/downloads/
-   *(Make sure to check "Add Python to PATH" during installation)*
+2. **Crucial Step:** Double-click the installer, and at the very bottom of the setup window, check the box that says **"Add python.exe to PATH"** (or "Add Python to PATH") before clicking "Install Now"[cite: 1].
 
-2. Open cmd and verify installation:
+---
+
+## Step 1: Download & Place the Script
+
+1. Copy the code for `convert_by_word.py`.
+2. Save/move the `convert_by_word.py` file directly onto your **Windows Desktop**.
+   *(Placing it on the desktop makes it much easier to target in the following steps!)*
+
+---
+
+## Step 2: Open Command Prompt (CMD) & Navigate to Desktop
+
+We need to tell your computer's terminal to look at your Desktop folder where the script is located.
+
+1. Press the **`Win + R`** keys on your keyboard, type **`cmd`**, and press **Enter** to open the Command Prompt (the black window).
+2. Type the following command to switch your directory to the Desktop, then press **Enter**:
    ```cmd
-   python --version
+   cd Desktop
    ```
-## If you already have Python, then...
-
-1. Open cmd and install the required libraries:
-   ```cmd
-   pip install python-docx openpyxl python-pptx img2pdf reportlab pillow
-   ```
-(If pip doesn't work, try py -m pip install ...)
-
-3. Add shortcut
-
-Put the Python file on the desktop
-
-Make your own choice：
-
-1: A completion message will pop up.
-Right-click on the desktop → New → Shortcut, enter the target field：<br>
-pythonw.exe "C:\Users\YOUR USER NAME\Desktop\convert_to_pdf_nolibre.py" --notify<br>
-After you drag the file up, a small window will pop up telling you which ones succeeded and which ones failed.
-
-2：Complete silence, do not jump anything<br>
-Right-click on the desktop → New → Shortcut, enter the target field：<br>
-pythonw.exe "C:\Users\YOUR USER NAME\Desktop\convert_to_pdf_nolibre.py" --silent
-
-### 💡 How to find your computer's User Name?
-
-If you don't know your Windows username, you can easily find it by following these steps:
-
-1. Press the **`Win + R`** keys on your keyboard, type **`cmd`**, and press **Enter** to open the command prompt (the black window).
-2. Type the following command and press **Enter**:
-   ```cmd
-   whoami
-   ```
+   
