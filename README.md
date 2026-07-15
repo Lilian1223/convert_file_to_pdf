@@ -10,7 +10,7 @@ python --version
 
 ## If you already have Python, then...
 
-1. Download: 
+1. Download, at cmd enter: 
 py -m pip install python-docx openpyxl python-pptx img2pdf reportlab pillow
 
 2. Add shortcut
