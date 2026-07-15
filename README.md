@@ -32,3 +32,13 @@ After you drag the file up, a small window will pop up telling you which ones su
 2：Complete silence, do not jump anything<br>
 Right-click on the desktop → New → Shortcut, enter the target field：<br>
 pythonw.exe "C:\Users\YOUR USER NAME\Desktop\convert_to_pdf_nolibre.py" --silent
+
+### 💡 How to find your computer's User Name?
+
+If you don't know your Windows username, you can easily find it by following these steps:
+
+1. Press the **`Win + R`** keys on your keyboard, type **`cmd`**, and press **Enter** to open the command prompt (the black window).
+2. Type the following command and press **Enter**:
+   ```cmd
+   whoami
+   ```
