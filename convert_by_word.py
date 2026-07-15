@@ -3,7 +3,7 @@ import sys
 import ctypes
 import time
 
-# 註冊 Windows 編碼環境，保護拖曳中文字元路徑
+# Register a Windows encoding environment to protect dragged Chinese character paths.
 if sys.platform == 'win32':
     try:
         import locale
@@ -18,11 +18,11 @@ if sys.platform == 'win32':
 
 def convert_to_pdf_via_word(docx_path):
     """
-    調用微軟 Word 引擎轉換 docx 為 pdf，保證 100% 不跑格、無亂碼
+    It uses the Microsoft Word engine to convert docx files to pdf, guaranteeing 100% no formatting issues and no garbled characters.
     """
     import win32com.client
     
-    # 取得絕對路徑（Word API 必須要用絕對路徑才不易出錯）
+    # Obtain the absolute path (the Word API requires absolute paths to avoid errors).
     abs_docx_path = os.path.abspath(docx_path)
     base_name, _ = os.path.splitext(abs_docx_path)
     pdf_path = base_name + ".pdf"
@@ -30,31 +30,31 @@ def convert_to_pdf_via_word(docx_path):
     word = None
     doc = None
     try:
-        print(f"\n正在調用 Word 引擎轉換: {os.path.basename(docx_path)}...")
+        print(f"\nCalling the Word engine for conversion: {os.path.basename(docx_path)}...")
         
-        # 啟動背景 Word 程序
-        # CoInitialize 預防多線程問題
+        # Startup background: Word program
+        # CoInitialize prevents multithreading issues.
         import pythoncom
         pythoncom.CoInitialize()
         
         word = win32com.client.DispatchEx("Word.Application")
-        word.Visible = False  # 不顯示 Word 視窗
-        word.DisplayAlerts = 0  # 關閉 Word 的警告彈窗（如：巨集警告、唯讀提示）
+        word.Visible = False  # Word window not displayed
+        word.DisplayAlerts = 0  # Disable Word's warning pop-ups (such as macro warnings and read-only warnings).
         
-        # 開啟 Word 檔
+        # Open Word document
         doc = word.Documents.Open(abs_docx_path, ReadOnly=1)
         
-        # Word 儲存為 PDF 的格式碼是 17
+        # The format code for saving a Word document as a PDF is 17.
         wdFormatPDF = 17
         doc.SaveAs(pdf_path, FileFormat=wdFormatPDF)
         
-        print(f"🎉 轉換成功！ PDF 已儲存至: {pdf_path}")
+        print(f"🎉 Conversion successful! PDF saved to: {pdf_path}")
         return True
     except Exception as e:
-        print(f"❌ 轉換失敗，錯誤原因: {e}")
+        print(f"❌ Conversion failed, error reason: {e}")
         return False
     finally:
-        # 確保不管成功或失敗，都會把背景 Word 程式與檔案關閉，釋放記憶體
+        # Ensure that the background Word program and files are closed regardless of success or failure to free up memory.
         if doc is not None:
             try:
                 doc.Close(SaveChanges=0)
@@ -67,19 +67,19 @@ def convert_to_pdf_via_word(docx_path):
                 pass
 
 def main():
-    # 支援拖曳多個檔案
+    # Supports dragging and dropping multiple files
     files = sys.argv[1:]
     
     if not files:
         print("="*60)
-        print("💡 使用說明：")
-        print("請直接將一個或多個 Word 檔案 (.docx / .doc) 拖曳到本程式圖示上！")
+        print("💡 Instructions for use：")
+        print("Please drag and drop one or more Word files (.docx / .doc) directly onto this program icon!")
         print("="*60)
-        input("\n請按 Enter 鍵結束...")
+        input("\nPlease press Enter to finish....")
         return
 
     print("="*60)
-    print("🚀 微軟 Word 官方引擎 PDF 轉檔工具 🚀")
+    print("🚀 Microsoft Word official engine PDF conversion tool 🚀")
     print("="*60)
     
     success_count = 0
@@ -97,16 +97,16 @@ def main():
             else:
                 fail_count += 1
         else:
-            print(f"⚠️ 跳過不支援的檔案格式: {os.path.basename(file_path)} (僅支援 .docx 與 .doc)")
+            print(f"⚠️ Skip unsupported file formats: {os.path.basename(file_path)} (Supported only .docx 與 .doc)")
             fail_count += 1
             
     print("\n" + "="*60)
-    print(f"📊 轉檔任務結束！成功: {success_count} 個 | 失敗: {fail_count} 個")
+    print(f"📊 File transfer mission complete! Success!: {success_count} items | Fail: {fail_count} items")
     print("="*60)
     
-    # 倒數 3 秒後自動關閉視窗，方便連續工作
+    # The window will automatically close after a 3-second countdown for convenient continuous work.
     for i in range(3, 0, -1):
-        print(f"\r視窗將在 {i} 秒後自動關閉...", end="", flush=True)
+        print(f"\rThe window will close automatically in {i} seconds...", end="", flush=True)
         time.sleep(1)
 
 if __name__ == "__main__":
